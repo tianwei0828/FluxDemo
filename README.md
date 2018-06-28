@@ -3,5 +3,5 @@
 #### 一、框架对比
 |类型|MVC|MVP|FLUX|
 --|--|--|--|
-优点|1、开发速度快<br>2、易于理解 | 1、解放了Activity和Fragment<br>2、解耦合 | 1、数据单向流动，易于理解和debug<br>2、彻底解放Activity和Fragment<br>3、所有的事件都是Action驱动<br>4、分层明确，解耦合 |
+优点|1、开发速度快<br>2、易于理解 | 1、将部分逻辑从Activity和Fragment抽取到P<br>2、部分解耦合 | 1、数据单向流动，易于理解和debug<br>2、彻底解放Activity和Fragment<br>3、所有的事件都是Action驱动<br>4、分层明确，解耦合 |
 缺点| 1、紧耦合<br>2、Activity或者Fragment承载V和M的交互，业务复杂时会变得臃肿庞大| 1、接口定义多<br>2、P与P交互时需要通过Activity或者Fragment中转，P与P交互多了，Activity和Fragment又变得臃肿了      | 暂无(自我感觉良好)     |
