@@ -107,3 +107,65 @@ M：准确的说，应该是VM(ViewModel)，订阅V的intents，处理intents然
 1、增加Repository，其作用是为某一个业务提供其所需要的全部数据功能，且将RxJava的生命周期统一管理
 2、增加Model，其作用不言而喻，以流的形式提供各种数据
 ```
+#### 四、fluxlib目录结构
+![](https://ws1.sinaimg.cn/large/c02fa50agy1fsxy64duqaj20d0126djh.jpg)
+##### 1、actions
+```kotlin
+Action：事件class
+BaseActionType：通用的事件类型
+ActionCreater：Action的创建器，根据ActionType以及data即可创建Action的实例
+示例：ActionCreater.createAction(BaseActionType.REGISTER,store)//创建将store注册到Dispatcher的Action
+```
+##### 2、bus
+```
+Bus：对EventBus的定制化封装
+```
+##### 3、component
+###### 3.1、activities
+```
+Activity：定义Activity的接口
+BaseActivity：基类Activity，主要处理生命周期相关以及加载View的事情
+```
+###### 3.2、repository
+```
+Repository：定义Repository的接口
+BaseRepository：主要管理Model生命周期
+SystemNetRepository：系统网络变化的Repository
+```
+###### 3.3、stores
+```
+Store：定义Store的接口
+BaseStore：实现注册和注销时的行为以及发射事件的通用方法
+SystemNetStore：系统网络变化的Store，在网络发生变化时，发射相应的事件，BaseView会监听这些事件
+```
+###### 3.3、views
+```
+View：定义View的接口
+BaseView：进行View的填充以及针对Activity生命周期所做的通用事务以及类似于显示toast这类通用View事务
+```
+##### 4、datas
+```
+Datas.kt：数据类
+```
+##### 5、dispatcher
+```
+Dispatcher：维护store的注册表以及分发Action给所有注册的store
+```
+##### 6、events
+```
+BaseDataEvent：带有数据Event的基类
+BaseEmptyEvent：无数据Event的基类
+CommonDataEvents.kt：通用数据类
+NetConnectedEvent：网络连接Event
+NoNetConnectedEvent：网络断开的Event
+```
+##### 7、views
+```
+ConfirmDialog：自定义通用确认Dialog
+LoadingDialog：自定义loading dialog
+```
+##### 8、BaseApp
+```
+Application基类
+```
+
