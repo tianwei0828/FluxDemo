@@ -58,11 +58,29 @@ M：同上
 ```
 ![](https://upload-images.jianshu.io/upload_images/3900981-5b21705fd7befebd.png)
 ##### 5、MVI
-
-|类型|MVC|MVP|FLUX|
---|--|--|--|
-优点|1、开发速度快<br>2、易于理解 | 1、将部分逻辑从Activity和Fragment抽取到P<br>2、部分解耦合 | 1、数据单向流动，易于理解和debug<br>2、彻底解放Activity和Fragment<br>3、所有的事件都是Action驱动<br>4、分层明确，解耦合 |
-缺点| 1、紧耦合<br>2、Activity或者Fragment承载V和M的交互，业务复杂时会变得臃肿庞大| 1、接口定义多<br>2、P与P交互时需要通过Activity或者Fragment中转，P与P交互多了，Activity和Fragment又变得臃肿了      | 暂无(自我感觉良好)     |
+![](https://raw.githubusercontent.com/oldergod/android-architecture/todo-mvi-rxjava-kotlin/art/MVI_detail.png)
+```
+工作流程：
+1、用户事件出发intents方法，intents方法将intent流merge
+2、调用VM的processIntents，然后将intents转发到PublishSubject中
+3、在VM中将intents转化成action
+4、在VM中根据不同的action执行不同的task，task返回对应的result
+5、在VM中通过reducer将result转换成VS((ViewState))
+6、在V中订阅VM中的事件代理，并执行render方法，根据不同的VS做相应的UI展示
+```
+```
+各层职责：
+V：Activity+Fragment，发射intents到VM，订阅VM从而实现V的更新
+I：V的intent，如点击事件进行的下一步操作，是一个class
+M：准确的说，应该是VM(ViewModel)，订阅V的intents，处理intents然后发射VS(ViewState)
+优点：
+1、数据单向流动
+2、充分利用RxJava响应式编程的优点
+缺点：
+1、学习成本高，需要熟练掌握ReactiveX的操作符
+2、VM承担的任务太多，太过臃肿
+3、V要承担部分RxJava生命周期的管理
+```
 
 #### 二、facebook flux结构以及数据流
 ![](https://facebook.github.io/flux/img/flux-simple-f8-diagram-explained-1300w.png)
@@ -76,7 +94,7 @@ M：同上
 ```
 ##### 3、Store
 ```
-接收事件分发器发来的action，并响应对应的action
+接收事件分发器发来的action，并响应对应的action，将结果发射出去
 ```
 ##### 4、View
 ```
