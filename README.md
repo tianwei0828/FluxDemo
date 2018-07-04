@@ -102,3 +102,8 @@ M：准确的说，应该是VM(ViewModel)，订阅V的intents，处理intents然
 ```
 #### 三、Android flux结构以及数据流
 ![](https://ws1.sinaimg.cn/large/c02fa50agy1fswh0belokj21cj12a77h.jpg)
+#### facebook flux框架是为RN设计的，应用在安卓上我做了一些调整
+```
+1、增加Repository，其作用是为某一个业务提供其所需要的全部数据功能，且将RxJava的生命周期统一管理
+2、增加Model，其作用不言而喻，以流的形式提供各种数据
+```
