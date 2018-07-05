@@ -171,31 +171,154 @@ Application基类
 #### 五、如何使用
 ##### 1、目录结构
 ![](https://ws1.sinaimg.cn/large/c02fa50agy1fsz00gobkjj20e412aq6e.jpg)
-##### 2、FluxDemoApp
-```java
-public class FluxDemoApp extends BaseApp {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        initLogger();
-        initNet();
+##### 2、以一个获取天气的Demo App来说明如何使用本框架
+###### 1、HomeActivity
+```kotlin
+class HomeActivity : AbstractActivity() {
+    private lateinit var homeStore: HomeStore
+    override fun initToolBar() {
+        //设置toolbar相关属性
+        toolBar.show()
+        toolBar.setTitle("当日天气")
+        toolBar.showBack()
     }
 
-    private void initLogger() {
-        if (BuildConfig.DEBUG) {
-            FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
-                    .tag(getClass().getSimpleName())
-                    .build();
-            Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
-        }
+    override fun initView(savedInstanceState: Bundle?) {
+        super.initView(savedInstanceState)
+        //初始化HomeView
+        val homeView = HomeView(this)
+        addView(homeView)
     }
 
-    private void initNet() {
-        Options options = new Options.Builder()
-                .baseUrl(BuildConfig.BASE_SERVER_URL)
-                .debug(BuildConfig.DEBUG)
-                .build();
-        HttpRequest.init(options);
+    override fun initData(savedInstanceState: Bundle?) {
+        //初始化HomeStore
+        homeStore = HomeStore()
+        //将homeStore注册到Dispatcher中
+        ActionCreator.createRegisterAction(homeStore)
+    }
+
+    override fun releaseResource() {
+        //页面销毁时，将homeStore从Dispatcher中注销
+        ActionCreator.createUnregisterAction(homeStore)
     }
 }
 ```
+###### 2、HomeView
+```kotlin
+class HomeView(activity: Activity) : BaseView(activity) {
+    override fun getViewLayoutId(): Int {
+        //加载布局
+        return R.layout.activity_home
+    }
+
+    private val btnGetWeatherInfo = realView.findViewById<Button>(R.id.btnGetWeatherInfo)
+    private val tvWeatherInfo = realView.findViewById<TextView>(R.id.tvWeatherInfo)
+
+    init {
+        //设置点击查询天气按钮的监听
+        RxView.clicksThrottle1s(btnGetWeatherInfo)
+                .subscribe {
+                    //发送GET_WEATHER_INFO Action
+                    ActionCreator.createAction(ActionType.GET_WEATHER_INFO, "上海")
+                    showLoading()
+                }
+    }
+
+    private fun showWeatherInfo(weatherInfo: WeatherInfo) {
+        tvWeatherInfo.text = weatherInfo.toString()
+    }
+
+    //查询天气成功
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onWeatherInfoEvent(event: WeatherInfoEvent) {
+        Logger.e("onWeatherInfoEvent event: $event")
+        hideLoading()
+        showWeatherInfo(event.weatherInfo)
+    }
+
+    //查询天气失败
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onFluxExceptionEvent(event: FluxExceptionEvent) {
+        Logger.e("onFluxExceptionEvent event: $event")
+        hideLoading()
+        showToastShort(event.fluxException.userMessage)
+    }
+}
+```
+###### 3、HomeStore
+```kotlin
+class HomeStore : BaseStore() {
+    private var homeRepository: HomeRepository? = null
+    override fun register() {
+        super.register()
+        //初始化HomeRepository
+        homeRepository = HomeRepository()
+    }
+
+    override fun unregister() {
+        super.unregister()
+        //销毁HomeRepository
+        homeRepository!!.destroy()
+        homeRepository = null
+    }
+
+    override fun <T> onActionDispatch(type: Int, data: T?) {
+        when (type) {
+            //接收到GET_WEATHER_INFO Action后从homeRepository获取天气信息
+            ActionType.GET_WEATHER_INFO -> {
+                homeRepository!!.getWeatherInfo(data as String, object : WeatherInfoCallback {
+                    override fun onSuccess(weatherInfo: WeatherInfo) {
+                        //获取天气信息成功，发射天气信息
+                        postDataEvent(WeatherInfoEvent(weatherInfo))
+                    }
+
+                    override fun onError(fluxException: FluxException) {
+                        //获取天气信息失败，发射失败信息
+                        postDataEvent(FluxExceptionEvent(fluxException))
+                    }
+                })
+            }
+        }
+    }
+}
+```
+###### 4、HomeRepository
+```kotlin
+class HomeRepository : BaseRepository() {
+    //初始化天气的Model
+    private val weather = Weather()
+    fun getWeatherInfo(city: String, weatherInfoCallback: WeatherInfoCallback) {
+        //调用model的方法，进行网络请求
+        weather.getWeatherInfo(city)
+                .subscribe(object : FluxDemoSingleObserver<WeatherInfo>() {
+                    override fun onSubscribe(d: Disposable) {
+                        super.onSubscribe(d)
+                        add(d)
+                    }
+
+                    override fun onSuccess(t: WeatherInfo) {
+                        weatherInfoCallback.onSuccess(t)
+                    }
+
+                    override fun onError(e: RxException) {
+                        weatherInfoCallback.onError(FluxException(e.msg, "获取天气信息失败,请重试", e.code))
+                    }
+                })
+    }
+}
+```
+###### 5、Weather
+```kotlin
+//获取天气的Model
+class Weather {
+    //获取天气信息的Single流
+    fun getWeatherInfo(city: String): Single<WeatherInfo> {
+        return HttpRequest.create(WeatherApi::class.java)
+                .getWeatherInfo(city)
+                .compose(RxJavaUtil.applySingleMainSchedulers())
+                .compose(NetRxJavaUtil.applySingleFeedTransformer())
+    }
+}
+```
+
+#### 好了，Android Flux框架就介绍到这里，水平有限，还请各位大佬多多指教，如果有什么问题和优化建议欢迎给我留言，我会及时回复大家，谢谢！
