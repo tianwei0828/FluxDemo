@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/common_toolbar_height"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/ivBack"
+        android:layout_width="@dimen/common_icon_back_width"
+        android:layout_height="@dimen/common_icon_back_height"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/common_margin"
+        android:src="@mipmap/icon_common_back" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/CommonTitleTextTheme"
+        android:layout_centerInParent="true" />
+
+    <ImageView
+        style="@style/CommonDividedLineTheme"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

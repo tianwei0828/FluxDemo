@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorHalfTransparent" type="color">#80000000</color>
+    <color name="colorDividedLine">#D2D2D2</color>
+    <color name="colorGray99">#999999</color>
+    <color name="colorCommonBtnBgBlue">#1F6FFF</color>
+    <color name="colorCommonBtnBgPressedBlue">#7A9BD6</color>
+</resources>

@@ -1,0 +1,6 @@
+<resources>
+    <!-- splash activity theme. -->
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/layer_list_splash</item>
+    </style>
+</resources>

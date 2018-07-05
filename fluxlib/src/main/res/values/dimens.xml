@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="confirm_dialog_title_height">40dp</dimen>
+    <dimen name="confirm_dialog_content_height">150dp</dimen>
+    <dimen name="confirm_dialog_btn_height">35dp</dimen>
+    <dimen name="common_title_text_size">20sp</dimen>
+
+    <!-- common divided line -->
+    <dimen name="common_divided_line_height">1dp</dimen>
+    <dimen name="common_text_size">16sp</dimen>
+    <dimen name="common_padding">14dp</dimen>
+</resources>

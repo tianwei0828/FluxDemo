@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <!-- common loading dialog theme -->
+    <style name="LoadingDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/colorHalfTransparent</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <!-- common confirm dialog theme -->
+    <style name="ConfirmDialogTheme" parent="@android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!--common title text theme-->
+    <style name="CommonTitleTextTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/common_title_text_size</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <!--common divided line theme-->
+    <style name="CommonDividedLineTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/common_divided_line_height</item>
+        <item name="android:background">@color/colorDividedLine</item>
+    </style>
+
+    <!-- common text theme -->
+    <style name="CommonTextTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/common_text_size</item>
+    </style>
+
+    <!-- common black text theme -->
+    <style name="CommonBlackTextTheme" parent="CommonTextTheme">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+</resources>

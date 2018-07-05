@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- common margin begin -->
+    <dimen name="common_small_margin">7dp</dimen>
+    <dimen name="common_margin">14dp</dimen>
+    <dimen name="common_big_margin">24dp</dimen>
+    <dimen name="common_huge_margin">34dp</dimen>
+    <!-- common margin end -->
+
+    <!-- common padding begin -->
+    <dimen name="common_padding">14dp</dimen>
+    <dimen name="common_big_padding">24dp</dimen>
+    <dimen name="common_huge_padding">34dp</dimen>
+    <!-- common padding end -->
+
+    <!--common toolbar begin-->
+    <dimen name="common_toolbar_height">74dp</dimen>
+    <dimen name="common_toolbar_content_height">60dp</dimen>
+    <dimen name="common_icon_back_width">20dp</dimen>
+    <dimen name="common_icon_back_height">20dp</dimen>
+    <dimen name="common_icon_user_width">30dp</dimen>
+    <dimen name="common_icon_user_height">30dp</dimen>
+    <dimen name="common_icon_message_width">25dp</dimen>
+    <dimen name="common_icon_message_height">25dp</dimen>
+    <dimen name="common_icon_close_width">22dp</dimen>
+    <dimen name="common_icon_close_height">22dp</dimen>
+    <!--common toolbar end-->
+</resources>

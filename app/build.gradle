@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+def BASE_SERVER_DEBUG_URL = "\"https://www.sojson.com/\""
+def BASE_SERVER_RELEASE_URL = "\"https://www.sojson.com/\""
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.version.fluxDemoVersionCode
+        versionName rootProject.ext.version.fluxDemoVersionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        debug{
+            buildConfigField "String", "BASE_SERVER_URL", "${BASE_SERVER_DEBUG_URL}"
+        }
+        release {
+            minifyEnabled true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), "$rootDir/proguard/flux_demo_proguard_rules.pro"
+            buildConfigField "String", "BASE_SERVER_URL", "${BASE_SERVER_RELEASE_URL}"
+
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.android["sourceCompatibility"]
+        targetCompatibility rootProject.ext.android["targetCompatibility"]
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    testImplementation rootProject.ext.dependencies["junit"]
+    androidTestImplementation rootProject.ext.dependencies["test-runner"]
+    androidTestImplementation rootProject.ext.dependencies["test-espresso"]
+    implementation rootProject.ext.dependencies["rxbinding-kotlin"]
+    implementation project(':fluxlib')
+}
