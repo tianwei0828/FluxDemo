@@ -168,4 +168,34 @@ LoadingDialog：自定义loading dialog
 ```
 Application基类
 ```
+#### 五、如何使用
+##### 1、目录结构
+![](https://ws1.sinaimg.cn/large/c02fa50agy1fsz00gobkjj20e412aq6e.jpg)
+##### 2、FluxDemoApp
+```java
+public class FluxDemoApp extends BaseApp {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initLogger();
+        initNet();
+    }
 
+    private void initLogger() {
+        if (BuildConfig.DEBUG) {
+            FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                    .tag(getClass().getSimpleName())
+                    .build();
+            Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+        }
+    }
+
+    private void initNet() {
+        Options options = new Options.Builder()
+                .baseUrl(BuildConfig.BASE_SERVER_URL)
+                .debug(BuildConfig.DEBUG)
+                .build();
+        HttpRequest.init(options);
+    }
+}
+```
